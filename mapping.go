@@ -21,8 +21,16 @@ func NewMapping(s *Soundcontrol) (*Mapping, error) {
 	return newMapping, nil
 }
 
+func (m *Mapping) initialize() error {
+
+	m.setupOnSliderMove()
+
+	return nil
+}
+
 func (m *Mapping) handleSliderMoveEvent(event SliderMoveEvent) {
 	log.Println("todo move")
+	log.Println(event)
 }
 
 func (m *Mapping) setupOnSliderMove() {

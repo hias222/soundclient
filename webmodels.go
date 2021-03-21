@@ -106,6 +106,7 @@ func (newSocket *MessageSocket) Stop() {
 func (newSocket *MessageSocket) SubscribeToSliderMoveEvents() chan SliderMoveEvent {
 	ch := make(chan SliderMoveEvent)
 	newSocket.sliderMoveConsumers = append(newSocket.sliderMoveConsumers, ch)
+	log.Println("SubscribeToSliderMoveEvents")
 
 	return ch
 }

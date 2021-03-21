@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -64,12 +65,13 @@ func (s *Soundcontrol) Initialize() error {
 			return fmt.Errorf("load config during init: %w", err)
 		}
 
-		// initialize the session map
-		if err := d.sessions.initialize(); err != nil {
-			d.logger.Errorw("Failed to initialize session map", "error", err)
-			return fmt.Errorf("init session map: %w", err)
-		}
 	*/
+
+	// initialize the session map
+	if err := s.mapping.initialize(); err != nil {
+		log.Fatal("Failed to initialize mapping", "error", err)
+		return fmt.Errorf("init mapping: %w", err)
+	}
 
 	s.setupInterruptHandler()
 	s.run()
