@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -23,6 +24,21 @@ type MessageSocket struct {
 type SliderMoveEvent struct {
 	SliderID     int
 	PercentValue float32
+}
+
+type JsonMessage struct {
+	Messagetype int    `json:"type"`
+	MessageBody string `json:"body"`
+}
+
+type SoundMessage struct {
+	Type    int `json:"type"`
+	Message SliderMessage
+}
+
+type SliderMessage struct {
+	SliderID     int     `json:"id,omitempty"`
+	PercentValue float32 `json:"percent,omitempty"`
 }
 
 func AllUsers() {
@@ -51,18 +67,27 @@ func (newSocket *MessageSocket) receiveHandler(connection *websocket.Conn) {
 			log.Println("Error in receive:", err)
 			return
 		}
-		newSocket.testit(msg)
+		newSocket.mapToJsonMsg(msg)
 	}
 }
 
-func (newSocket *MessageSocket) testit(msg []byte) {
-	log.Printf("For Max: %s\n", msg)
+func (newSocket *MessageSocket) mapToJsonMsg(msg []byte) {
+	var soundMessage SoundMessage
+	sliderError := json.Unmarshal(msg, &soundMessage)
+
+	if sliderError != nil {
+		return
+	}
+
+	if soundMessage.Type != 2 {
+		return
+	}
 
 	moveEvents := []SliderMoveEvent{}
 
 	moveEvents = append(moveEvents, SliderMoveEvent{
-		SliderID:     1,
-		PercentValue: 0.1,
+		SliderID:     soundMessage.Message.SliderID,
+		PercentValue: soundMessage.Message.PercentValue,
 	})
 
 	for _, consumer := range newSocket.sliderMoveConsumers {

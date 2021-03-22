@@ -30,7 +30,7 @@ func (m *Mapping) initialize() error {
 
 func (m *Mapping) handleSliderMoveEvent(event SliderMoveEvent) {
 	log.Println("todo move")
-	log.Println(event)
+	log.Printf("slider %d percent %g", event.SliderID, event.PercentValue)
 }
 
 func (m *Mapping) setupOnSliderMove() {
