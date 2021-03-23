@@ -48,7 +48,7 @@ func AllUsers() {
 func NewWebsocket() (*MessageSocket, error) {
 
 	newSocket := &MessageSocket{
-		serverURL:           "ws://localhost:8080" + "/ws",
+		serverURL:           "ws://192.168.178.174:8081" + "/ws",
 		stopChannel:         make(chan bool),
 		connected:           false,
 		sliderMoveConsumers: []chan SliderMoveEvent{},
