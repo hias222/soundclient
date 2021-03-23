@@ -32,6 +32,13 @@ func (m *Mapping) handleSliderMoveEvent(event SliderMoveEvent) {
 	// {"id": 1, "percent": 0.2}
 	log.Println("todo move")
 	log.Printf("slider %d percent %g", event.SliderID, event.PercentValue)
+
+	var volumeFlag VolumeFlag
+	volumeFlag.IsSet = true
+	volumeFlag.Value = event.PercentValue
+
+	endpointVolume(volumeFlag)
+
 }
 
 func (m *Mapping) setupOnSliderMove() {
