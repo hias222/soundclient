@@ -148,7 +148,7 @@ func main() {
 		log.Fatal("Failed to initialize sound ", "error", err)
 	}
 
-	socketUrl := "ws://localhost:8080" + "/ws"
+	socketUrl := "ws://localhost:8080" + "/soundws/ws"
 	conn, _, err := websocket.DefaultDialer.Dial(socketUrl, nil)
 	if err != nil {
 		log.Fatal("Error connecting to Websocket Server:", err)
