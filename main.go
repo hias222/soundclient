@@ -30,8 +30,17 @@ type Soundcontrol struct {
 	stopChannel chan bool
 }
 
-func NewSoundcontrol(verbose bool) (*Soundcontrol, error) {
-	newSocket, err := NewWebsocket()
+type Socketdata struct {
+	socketUrl string
+}
+
+func NewSoundcontrol(verbose bool, socketUrl string) (*Soundcontrol, error) {
+
+	sockets := &Socketdata{
+		socketUrl: socketUrl,
+	}
+
+	newSocket, err := NewWebsocket(sockets)
 
 	s := &Soundcontrol{
 		socket:      newSocket,
@@ -39,7 +48,7 @@ func NewSoundcontrol(verbose bool) (*Soundcontrol, error) {
 	}
 
 	if err != nil {
-		log.Fatal("Error connecting to Websocket Server:", err)
+		log.Fatal("Error - connecting to Websocket Server: ", err)
 		// return nil, fmt.Errorf("create new SerialIO: %w", err)
 	}
 
@@ -132,10 +141,13 @@ func main() {
 
 	verbose = true
 
+	//socketUrl := "ws://localhost:8081/soundws/ws"
+	socketUrl := "ws://192.168.178.174:8081" + "/soundws/ws"
+
 	signal.Notify(interrupt, os.Interrupt) // Notify the interrupt channel for SIGINT
 
 	// create the souncontrol instance
-	s, err := NewSoundcontrol(verbose)
+	s, err := NewSoundcontrol(verbose, socketUrl)
 
 	if err != nil {
 		log.Fatal("Failed to create Sound Control object", "error", err)
@@ -148,10 +160,10 @@ func main() {
 		log.Fatal("Failed to initialize sound ", "error", err)
 	}
 
-	socketUrl := "ws://localhost:8080" + "/soundws/ws"
 	conn, _, err := websocket.DefaultDialer.Dial(socketUrl, nil)
 	if err != nil {
-		log.Fatal("Error connecting to Websocket Server:", err)
+		log.Fatal("Error connecting to Websocket Server: ", err)
+		log.Fatal("---")
 	}
 	defer conn.Close()
 	go receiveHandler(conn)

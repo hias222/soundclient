@@ -45,16 +45,16 @@ func AllUsers() {
 	fmt.Println("All Users")
 }
 
-func NewWebsocket() (*MessageSocket, error) {
+func NewWebsocket(socketdata *Socketdata) (*MessageSocket, error) {
 
 	newSocket := &MessageSocket{
-		serverURL:           "ws://192.168.178.174:8081" + "/ws",
+		serverURL:           socketdata.socketUrl,
 		stopChannel:         make(chan bool),
 		connected:           false,
 		sliderMoveConsumers: []chan SliderMoveEvent{},
 	}
 
-	log.Println("Created socket instance")
+	log.Println("Created socket instance " + socketdata.socketUrl)
 
 	return newSocket, nil
 }
